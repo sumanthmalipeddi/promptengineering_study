@@ -419,8 +419,8 @@ This project is licensed under the MIT License - see LICENSE file for details.
 
 For questions or discussions:
 - Open an issue on GitHub
-- Connect on [LinkedIn](https://www.linkedin.com/in/yourprofile)
-- Follow on [Instagram](https://www.instagram.com/yourhandle) for data engineering content
+- Connect on [LinkedIn](https://www.linkedin.com/in/sumanth-malipeddi/)
+- Follow on [Instagram](https://www.instagram.com/the.intlovert?igsh=M2J0NzYzaG9oMjlk&utm_source=qr) for data engineering content
 
 ---
 
