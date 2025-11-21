@@ -91,7 +91,7 @@ pip install google-generativeai
 nano ~/.zshrc
 
 # Add this line at the end (replace with your actual key)
-export GEMINI_API_KEY="AIzaSyDf3N8xK2Qp9mL5vR7tW9jH4gB6cZ1aQ9E"
+export GEMINI_API_KEY="your-api-key-here"
 
 # Save (Ctrl+O, Enter, Ctrl+X) and reload
 source ~/.zshrc
