@@ -7,11 +7,13 @@ A complete guide to set up a prompt engineering learning environment using Googl
 - [Overview](#overview)
 - [Prerequisites](#prerequisites)
 - [Quick Start](#quick-start)
+- [Security: Rotating Your API Key](#security-rotating-your-api-key)
 - [Detailed Setup](#detailed-setup)
 - [Usage Examples](#usage-examples)
 - [Available Models](#available-models)
 - [Troubleshooting](#troubleshooting)
 - [Learning Resources](#learning-resources)
+- [Project Files](#project-files)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -46,14 +48,98 @@ conda create -n prompt-eng python=3.11 -y
 conda activate prompt-eng
 
 # 3. Install dependencies
-pip install google-generativeai
+pip install -r requirements.txt
 
-# 4. Set up API key (get it from https://aistudio.google.com/app/apikey)
+# 4. Set up API key (choose one method)
+# Method A: Shell environment variable
 export GEMINI_API_KEY="your-api-key-here"
+
+# Method B: .env file (recommended for projects)
+cp .env.example .env
+# Edit .env and add your API key
 
 # 5. Test the setup
 python test_gemini.py
+# Or use secure test with .env file
+python secure_test_gemini.py
 ```
+
+> **💡 Tip:** For permanent setup, see [Step 3](#step-3-configure-api-key-permanent-setup). If you exposed your key, see [Security: Rotating Your API Key](#security-rotating-your-api-key).
+
+## 🔒 Security: Rotating Your API Key
+
+**Important:** If you accidentally exposed your API key (e.g., committed to GitHub, shared publicly), follow these steps immediately:
+
+### 1. Generate a New API Key
+
+1. Visit [Google AI Studio API Keys](https://aistudio.google.com/app/apikey)
+2. Click on your existing key
+3. Click **"Revoke"** or **"Delete"** to invalidate the old key
+4. Click **"Create API Key"** to generate a new one
+5. Copy the new key (starts with `AIzaSy...`)
+
+### 2. Update Your Local Configuration
+
+Open a terminal and run:
+
+```bash
+# Edit your .zshrc or appropriate shell config
+nano ~/.zshrc
+```
+
+- Find the old line: `export GEMINI_API_KEY="old-key-value"`
+- Replace with your new key: `export GEMINI_API_KEY="YOUR_NEW_KEY_HERE"`
+- Save and exit (`Ctrl+O`, `Enter`, `Ctrl+X`)
+
+```bash
+# Reload your shell environment
+source ~/.zshrc
+```
+
+To confirm:
+
+```bash
+echo $GEMINI_API_KEY
+```
+
+Should print only your new key.
+
+### 3. (Optional) Remove Old Key from Shell Session
+
+If you started Python anywhere before running `source ~/.zshrc`, restart that terminal or run:
+
+```bash
+unset GEMINI_API_KEY
+source ~/.zshrc
+```
+
+### 4. Test Your Setup
+
+```bash
+python test_gemini.py
+```
+
+You should see the success message with your new key working properly.
+
+### 5. Security Best Practices
+
+- ✅ **Never commit API keys** to GitHub or version control
+- ✅ **Use `.gitignore`** to exclude config files with keys
+- ✅ **Use environment variables** instead of hardcoding keys
+- ✅ **Rotate keys regularly** if used in production
+- ✅ **Use `.env` files** for project-specific keys (add to `.gitignore`)
+
+**Example `.gitignore`:**
+```
+.env
+*.key
+*_config.py
+.zshrc_backup
+```
+
+> **📖 For comprehensive security guidelines, see [SECURITY.md](SECURITY.md)**
+
+---
 
 ## 📚 Detailed Setup
 
@@ -73,8 +159,11 @@ conda create -n prompt-eng python=3.11 -y
 # Activate environment
 conda activate prompt-eng
 
-# Install Google Generative AI package
-pip install google-generativeai
+# Install all dependencies from requirements.txt
+pip install -r requirements.txt
+
+# Or install individually
+pip install google-generativeai python-dotenv
 ```
 
 **Why isolated environment?**
@@ -84,6 +173,8 @@ pip install google-generativeai
 
 ### Step 3: Configure API Key (Permanent Setup)
 
+> **⚠️ Security Warning:** Never commit your API key to version control. Keep it in shell config files that are not tracked by git.
+
 #### For macOS/Linux (zsh shell):
 
 ```bash
@@ -91,7 +182,7 @@ pip install google-generativeai
 nano ~/.zshrc
 
 # Add this line at the end (replace with your actual key)
-export GEMINI_API_KEY="your-api-key-here"
+export GEMINI_API_KEY="AIzaSyDf3N8xK2Qp9mL5vR7tW9jH4gB6cZ1aQ9E"
 
 # Save (Ctrl+O, Enter, Ctrl+X) and reload
 source ~/.zshrc
@@ -103,6 +194,30 @@ echo $GEMINI_API_KEY
 #### For bash shell:
 
 Replace `~/.zshrc` with `~/.bashrc` in the above commands.
+
+#### Alternative: Using .env File (Recommended for Projects)
+
+For project-specific configuration, you can use a `.env` file:
+
+```bash
+# 1. Install python-dotenv
+pip install python-dotenv
+
+# 2. Copy the example file
+cp .env.example .env
+
+# 3. Edit .env and add your API key
+nano .env
+
+# 4. Use the secure test script
+python secure_test_gemini.py
+```
+
+**Benefits of .env approach:**
+- ✅ Project-specific keys (different keys for different projects)
+- ✅ Easier to manage in teams (share .env.example, not .env)
+- ✅ Automatically excluded by .gitignore
+- ✅ No shell configuration needed
 
 ### Step 4: Create Test File
 
@@ -394,6 +509,33 @@ If you have a Google student account:
 1. Visit https://aistudio.google.com/
 2. Sign in with your .edu email or student-verified Google account
 3. Check pricing page for "Student Free Tier" badge
+
+## 📁 Project Files
+
+This repository includes several helper files for secure setup:
+
+| File | Purpose |
+|------|---------|
+| `test_gemini.py` | Basic API connection test |
+| `secure_test_gemini.py` | Secure test using .env file configuration |
+| `.env.example` | Template for environment variables (copy to `.env`) |
+| `.gitignore` | Prevents committing sensitive files to git |
+
+**Quick security setup:**
+
+```bash
+# Copy example files
+cp .env.example .env
+
+# Edit .env with your API key
+nano .env
+
+# Install dotenv for secure loading
+pip install python-dotenv
+
+# Test secure configuration
+python secure_test_gemini.py
+```
 
 ## 🤝 Contributing
 
